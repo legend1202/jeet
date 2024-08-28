@@ -65,7 +65,7 @@ export default function Header() {
           <Box sx={{ flexGrow: 1 }} />
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            {mdUp && <LoginButton />}
+            <LoginButton />
 
             <SettingsButton
               sx={{
