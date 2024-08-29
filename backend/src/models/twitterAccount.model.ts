@@ -18,9 +18,9 @@ export interface TwitterAccount extends Document {
   twitter_name?: string;
   profile_pic?: string[];
   banner_pic?: string[];
-  sban: 1;
-  gban: '0/0';
-  trban: 1;
+  sban: string;
+  gban: string;
+  trban: string;
   added_time?: string;
   bio?: string;
   createdAt: Date;
@@ -40,9 +40,9 @@ const TwitterAccountSchema = new Schema<TwitterAccount>(
     twitter_blue: { type: String },
     owner: { type: String },
     proxy: { type: String },
-    sban: { type: Number },
+    sban: { type: String },
     gban: { type: String },
-    trban: { type: Number },
+    trban: { type: String },
     twitter_name: { type: String },
     profile_pic: { type: [String] },
     banner_pic: { type: [String] },

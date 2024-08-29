@@ -5,6 +5,7 @@ import {
   create,
   getByToken,
   update,
+  updateOwner,
   deleteTwitterAccount,
 } from '../controllers/twitterAccount.controller';
 import { errorWrap } from '../utils/error.utils';
@@ -21,6 +22,11 @@ router.put(
   '/',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   errorWrap(update, 'Could not update Account')
+);
+router.put(
+  '/owner',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  errorWrap(updateOwner, 'Could not update Account')
 );
 
 router.delete(

@@ -37,6 +37,19 @@ export const update = async (req: Request, res: Response) => {
     updatedTwitterAccount
   );
 };
+export const updateOwner = async (req: Request, res: Response) => {
+  const { updateData } = req.body;
+
+  const updatedTwitterAccount =
+    await handleTwitterAccountUpdate(updateData);
+
+  return sendResponse(
+    res,
+    200,
+    'twitter account Updated Successfully',
+    updatedTwitterAccount
+  );
+};
 
 export const deleteTwitterAccount = async (req: Request, res: Response) => {
   const { twitterAccountId } = req.body;

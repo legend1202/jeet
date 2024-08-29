@@ -86,24 +86,7 @@ export const getTwitterAccountByToken = async (
 ): Promise<TwitterAccount[] | null> => {
   if (!userId) throw new RequestError('User Id must not be empty', 400);
 
-  const result = await TwitterAccountModel.aggregate([
-    {
-      $lookup: {
-        from: OwnerModel.collection.name,
-        localField: 'owner',
-        foreignField: 'id',
-        as: 'ownerDetails',
-      },
-    },
-    {
-      $lookup: {
-        from: StrategyModel.collection.name,
-        localField: 'strategy',
-        foreignField: 'id',
-        as: 'strategyDetails',
-      },
-    },
-  ]);
+  const result = await TwitterAccountModel.find();
 
   return result;
 };
