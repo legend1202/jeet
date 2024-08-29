@@ -52,3 +52,13 @@ export interface ITTwitterAccount {
   totp_secret?: string;
   bio?: string;
 }
+
+export interface ITwitterAccountOnwerUpdate {
+  id: string;
+  owner: string;
+}
+
+export interface ITwitterAccountStrategyUpdate {
+  id: string;
+  strategy: string;
+}

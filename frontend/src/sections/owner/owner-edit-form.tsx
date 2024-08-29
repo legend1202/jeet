@@ -65,7 +65,7 @@ export default function OwnerForm({ currentOwner, handleUpdateData, onClose }: P
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="name" label="Name" />
+        <RHFTextField name="name" label="Username" />
 
         <RHFTextField name="bio" label="Bio" multiline rows={3} />
       </Stack>

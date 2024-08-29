@@ -3,7 +3,12 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { ITwitterAccount, ITTwitterAccount } from 'src/types/twitter';
+import {
+  ITwitterAccount,
+  ITTwitterAccount,
+  ITwitterAccountOnwerUpdate,
+  ITwitterAccountStrategyUpdate,
+} from 'src/types/twitter';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +51,29 @@ export async function createTwitterAccount(twitterData: ITTwitterAccount) {
 export async function updateTwitterAccount(twitterData: ITTwitterAccount) {
   const res = await axiosInstance.put(URL, {
     twitterAccount: twitterData,
+  });
+
+  const memoizedValue = {
+    result: res?.data.result as ITwitterAccount,
+  };
+
+  return memoizedValue;
+}
+
+export async function updateTwitterAccountOwner(updateData: ITwitterAccountOnwerUpdate) {
+  const res = await axiosInstance.put(`${URL  }/owner`, {
+    updateData,
+  });
+
+  const memoizedValue = {
+    result: res?.data.result as ITwitterAccount,
+  };
+
+  return memoizedValue;
+}
+export async function updateTwitterAccountStrategy(updateData: ITwitterAccountStrategyUpdate) {
+  const res = await axiosInstance.put(`${URL  }/owner`, {
+    updateData,
   });
 
   const memoizedValue = {

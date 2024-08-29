@@ -16,6 +16,8 @@ import {
 
 import { paths } from 'src/routes/paths';
 
+import { useGetOnwers } from 'src/api/owner';
+import { useGetStrategy } from 'src/api/strategy';
 import { deleteTwitterAccount, useGetTwitterAccount } from 'src/api/twitterAccount';
 
 import Iconify from 'src/components/iconify';
@@ -44,7 +46,11 @@ export default function TwitterAccountListView() {
 
   const settings = useSettingsContext();
 
-  const { twitterAccounts, twitterAccountsLoading } = useGetTwitterAccount();
+  const { owners } = useGetOnwers();
+
+  const { strategies } = useGetStrategy();
+
+  const { twitterAccounts } = useGetTwitterAccount();
 
   const [currentTwitterAccount, setCurrentTwitterAccount] = useState<ITTwitterAccount>();
 
@@ -52,14 +58,18 @@ export default function TwitterAccountListView() {
 
   const [tableData, setTableData] = useState<ITwitterAccount[]>([]);
 
+  const [tableLoading, settableLoading] = useState<boolean>(true);
+
   useEffect(() => {
     if (twitterAccounts.length) {
       setTableData(twitterAccounts);
+      settableLoading(false);
     }
   }, [twitterAccounts]);
 
   const handleDeleteRow = useCallback(
     async (id: string) => {
+      settableLoading(true);
       const deletedData = await deleteTwitterAccount(id);
       if (deletedData.success) {
         const deleteRow = tableData.filter((row) => row.id !== id);
@@ -67,6 +77,7 @@ export default function TwitterAccountListView() {
         enqueueSnackbar('Delete success!');
 
         setTableData(deleteRow);
+        settableLoading(false);
       }
     },
     [enqueueSnackbar, tableData]
@@ -79,7 +90,7 @@ export default function TwitterAccountListView() {
 
   const columns: GridColDef[] = [
     {
-      field: 'name',
+      field: 'username',
       headerName: 'User Name',
       flex: 1,
       minWidth: 140,
@@ -121,7 +132,9 @@ export default function TwitterAccountListView() {
       minWidth: 140,
       hideable: false,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellOwner params={params} />,
+      renderCell: (params) => (
+        <RenderCellOwner handleUpdateData={handleUpdateData} owners={owners} params={params} />
+      ),
     },
     {
       field: 'strategy',
@@ -130,10 +143,16 @@ export default function TwitterAccountListView() {
       minWidth: 140,
       hideable: false,
       disableColumnMenu: true,
-      renderCell: (params) => <RenderCellStrategy params={params} />,
+      renderCell: (params) => (
+        <RenderCellStrategy
+          handleUpdateData={handleUpdateData}
+          strategies={strategies}
+          params={params}
+        />
+      ),
     },
     {
-      field: 'age',
+      field: 'createdAt',
       headerName: 'Age',
       flex: 1,
       minWidth: 140,
@@ -176,9 +195,14 @@ export default function TwitterAccountListView() {
   };
 
   const handleUpdateData = (updatedResult: ITwitterAccount) => {
+    settableLoading(true);
+    setTableData([]);
     setCurrentTwitterAccount({});
     const unchangedRow = tableData.filter((row) => row.id !== updatedResult.id);
+
     const updatedRow = [...unchangedRow, updatedResult];
+    console.log(unchangedRow, updatedResult, updatedRow);
+    settableLoading(false);
     setTableData(updatedRow);
     setOpenForm(false);
   };
@@ -229,29 +253,31 @@ export default function TwitterAccountListView() {
             flexDirection: { md: 'column' },
           }}
         >
-          <DataGrid
-            checkboxSelection
-            disableRowSelectionOnClick
-            rows={tableData}
-            columns={columns}
-            loading={twitterAccountsLoading}
-            getRowHeight={() => 'auto'}
-            pageSizeOptions={[5, 10, 25]}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10 },
-              },
-            }}
-            slots={{
-              toolbar: () => (
-                <GridToolbarContainer>
-                  <GridToolbarQuickFilter />
-                </GridToolbarContainer>
-              ),
-              noRowsOverlay: () => <EmptyContent title="No Data" />,
-              noResultsOverlay: () => <EmptyContent title="No results found" />,
-            }}
-          />
+          {!tableLoading && (
+            <DataGrid
+              checkboxSelection
+              disableRowSelectionOnClick
+              rows={tableData}
+              columns={columns}
+              loading={tableLoading}
+              getRowHeight={() => 'auto'}
+              pageSizeOptions={[5, 10, 25]}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10 },
+                },
+              }}
+              slots={{
+                toolbar: () => (
+                  <GridToolbarContainer>
+                    <GridToolbarQuickFilter />
+                  </GridToolbarContainer>
+                ),
+                noRowsOverlay: () => <EmptyContent title="No Data" />,
+                noResultsOverlay: () => <EmptyContent title="No results found" />,
+              }}
+            />
+          )}
         </Card>
       </Container>
 

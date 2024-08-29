@@ -72,7 +72,7 @@ export default function OwnerListView() {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Telegram User Name',
+      headerName: 'Username',
       flex: 1,
       minWidth: 360,
       hideable: false,

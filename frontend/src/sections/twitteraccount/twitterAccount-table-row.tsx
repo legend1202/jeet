@@ -1,11 +1,33 @@
+import { useState, useEffect } from 'react';
+
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import { GridCellParams } from '@mui/x-data-grid';
 import ListItemText from '@mui/material/ListItemText';
+import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
+
+import { updateTwitterAccountOwner, updateTwitterAccountStrategy } from 'src/api/twitterAccount';
+
+import Label from 'src/components/label/label';
+
+import { IOwner } from 'src/types/owner';
+import { ISTRATEGY } from 'src/types/strategy';
+import { ITwitterAccount } from 'src/types/twitter';
+
 // ----------------------------------------------------------------------
 
 type ParamsProps = {
   params: GridCellParams;
+};
+type OwnerParamsProps = {
+  owners: IOwner[];
+  params: GridCellParams;
+  handleUpdateData: (updatedTwitterAccount: ITwitterAccount) => void;
+};
+type StrategyParamsProps = {
+  strategies: ISTRATEGY[];
+  params: GridCellParams;
+  handleUpdateData: (updatedTwitterAccount: ITwitterAccount) => void;
 };
 
 export function RenderCellUserName({ params }: ParamsProps) {
@@ -30,21 +52,27 @@ export function RenderCellUserName({ params }: ParamsProps) {
 export function RenderCellSB({ params }: ParamsProps) {
   const getSBANText = (sban: string) => {
     if (sban === '1') {
-      return '???';
-    } if (sban === '2') {
-      return 'NO';
-    } 
       return 'YES';
-    
+    }
+    if (sban === '2') {
+      return 'NO';
+    }
+    return '???';
   };
 
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <ListItemText
-        disableTypography
-        primary={getSBANText(params.row.sban)}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      />
+      <Label
+        variant="soft"
+        color={
+          (params.row.gban === '1' && 'success') ||
+          (params.row.gban === '2' && 'warning') ||
+          params.row.gban ||
+          'default'
+        }
+      >
+        {getSBANText(params.row.gban)}
+      </Label>
     </Stack>
   );
 }
@@ -52,11 +80,17 @@ export function RenderCellSB({ params }: ParamsProps) {
 export function RenderCellGhosty({ params }: ParamsProps) {
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <ListItemText
-        disableTypography
-        primary={params.row.gban ? `${params.row.gban * 100}%` : 0}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      />
+      <Label
+        variant="soft"
+        color={
+          (params.row.gban > 70 && 'success') ||
+          (params.row.gban <= 70 && params.row.gban > 30 && 'warning') ||
+          (params.row.gban <= 30 && 'error') ||
+          'default'
+        }
+      >
+        {params.row.gban ? `${params.row.gban * 100}%` : '???'}
+      </Label>
     </Stack>
   );
 }
@@ -64,35 +98,80 @@ export function RenderCellGhosty({ params }: ParamsProps) {
 export function RenderCellTrb({ params }: ParamsProps) {
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <ListItemText
-        disableTypography
-        primary={params.row.trban === 0 ? 'Inactive' : 'Active'}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      />
+      <Label
+        variant="soft"
+        color={
+          (params.row.trban === '1' && 'success') ||
+          (params.row.trban === '2' && 'warning') ||
+          params.row.trban ||
+          'default'
+        }
+      >
+        {params.row.trban ? 'Active' : 'Inactive'}
+      </Label>
     </Stack>
   );
 }
 
-export function RenderCellOwner({ params }: ParamsProps) {
+export function RenderCellOwner({ owners, params, handleUpdateData }: OwnerParamsProps) {
+  const [selectedValue, setSelectedValue] = useState<string>(params.row?.owner);
+
+  useEffect(() => {
+    setSelectedValue(params.row?.owner);
+  }, [params.row?.owner]);
+
+  // Handle change event
+  const handleChange = async (event: SelectChangeEvent<string>) => {
+    setSelectedValue(event.target.value);
+    const updateResult = await updateTwitterAccountOwner({
+      id: params.row.id,
+      owner: event.target.value,
+    });
+    handleUpdateData(updateResult.result);
+  };
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <ListItemText
-        disableTypography
-        primary={params.row?.ownerDetails && params.row?.ownerDetails[0]?.name}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      />
+      <FormControl fullWidth>
+        <Select value={selectedValue} onChange={handleChange}>
+          <MenuItem value="" />
+          {owners?.map((owner) => (
+            <MenuItem key={owner.id} value={owner.id}>
+              {owner.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Stack>
   );
 }
 
-export function RenderCellStrategy({ params }: ParamsProps) {
+export function RenderCellStrategy({ strategies, params, handleUpdateData }: StrategyParamsProps) {
+  const [selectedValue, setSelectedValue] = useState<string>(params.row?.strategy || '');
+
+  useEffect(() => {
+    setSelectedValue(params.row?.strategy);
+  }, [params.row?.strategy]);
+  // Handle change event
+  const handleChange = async (event: SelectChangeEvent<string>) => {
+    setSelectedValue(event.target.value);
+    const updateResult = await updateTwitterAccountStrategy({
+      id: params.row.id,
+      strategy: event.target.value,
+    });
+    handleUpdateData(updateResult.result);
+  };
   return (
     <Stack direction="row" alignItems="center" sx={{ py: 1, width: 1 }}>
-      <ListItemText
-        disableTypography
-        primary={params.row?.strategyDetails && params.row?.strategyDetails[0]?.name}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-      />
+      <FormControl fullWidth>
+        <Select value={selectedValue} onChange={handleChange}>
+          <MenuItem value="" />
+          {strategies?.map((strategy) => (
+            <MenuItem key={strategy.id} value={strategy.id}>
+              {strategy.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Stack>
   );
 }

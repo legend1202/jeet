@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
-import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
 
@@ -22,8 +21,6 @@ import SettingsButton from '../common/settings-button';
 
 export default function Header() {
   const theme = useTheme();
-
-  const mdUp = useResponsive('up', 'md');
 
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
 

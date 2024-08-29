@@ -10,8 +10,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogActions from '@mui/material/DialogActions';
 import { Card, Divider, CardHeader, Typography } from '@mui/material';
 
-import { getTimezones } from 'src/utils/timezone';
-
 import { upload } from 'src/api/upload';
 import { useGetOnwers } from 'src/api/owner';
 import { useGetStrategy } from 'src/api/strategy';
@@ -24,6 +22,47 @@ import { IOwner } from 'src/types/owner';
 import { Timezone } from 'src/types/timezone';
 import { ISTRATEGY } from 'src/types/strategy';
 import { IUploadUrlType, ITwitterAccount, ITTwitterAccount } from 'src/types/twitter';
+
+const timezones = [
+  { label: '(GMT -12:00) Eniwetok, Kwajalein', utc: '-12:00' },
+  { label: '(GMT -11:00) Midway Island, Samoa', utc: '-11:00' },
+  { label: '(GMT -10:00) Hawaii', utc: '-10:00' },
+  { label: '(GMT -9:30) Taiohae', utc: '-09:30' },
+  { label: '(GMT -9:00) Alaska', utc: '-09:00' },
+  { label: '(GMT -8:00) Pacific Time (US & Canada)', utc: '-08:00' },
+  { label: '(GMT -7:00) Mountain Time (US & Canada)', utc: '-07:00' },
+  { label: '(GMT -6:00) Central Time (US & Canada), Mexico City', utc: '-06:00' },
+  { label: '(GMT -5:00) Eastern Time (US & Canada), Bogota, Lima', utc: '-05:00' },
+  { label: '(GMT -4:30) Caracas', utc: '-04:30' },
+  { label: '(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz', utc: '-04:00' },
+  { label: '(GMT -3:30) Newfoundland', utc: '-03:30' },
+  { label: '(GMT -3:00) Brazil, Buenos Aires, Georgetown', utc: '-03:00' },
+  { label: '(GMT -2:00) Mid-Atlantic', utc: '-02:00' },
+  { label: '(GMT -1:00) Azores', utc: '-01:00' },
+  { label: '(GMT 00:00) Western Europe Time, London, Lisbon', utc: '00:00' },
+  { label: '(GMT +1:00) Central European Time, Brussels, Copenhagen', utc: '+01:00' },
+  { label: '(GMT +2:00) Eastern European Time, Athens, Bucharest', utc: '+02:00' },
+  { label: '(GMT +3:00) Moscow Time, Baghdad, Nairobi', utc: '+03:00' },
+  { label: '(GMT +3:30) Tehran', utc: '+03:30' },
+  { label: '(GMT +4:00) Abu Dhabi, Muscat, Baku', utc: '+04:00' },
+  { label: '(GMT +4:30) Kabul', utc: '+04:30' },
+  { label: '(GMT +5:00) Yekaterinburg, Islamabad, Karachi', utc: '+05:00' },
+  { label: '(GMT +5:30) Indian Standard Time, Sri Jayawardenepura', utc: '+05:30' },
+  { label: '(GMT +5:45) Kathmandu', utc: '+05:45' },
+  { label: '(GMT +6:00) Almaty, Dhaka', utc: '+06:00' },
+  { label: '(GMT +6:30) Cocos Islands', utc: '+06:30' },
+  { label: '(GMT +7:00) Bangkok, Jakarta, Hanoi', utc: '+07:00' },
+  { label: '(GMT +8:00) Beijing, Singapore, Perth', utc: '+08:00' },
+  { label: '(GMT +8:45) Southeastern Australia', utc: '+08:45' },
+  { label: '(GMT +9:00) Tokyo, Seoul, Yakutsk', utc: '+09:00' },
+  { label: '(GMT +9:30) Adelaide, Darwin', utc: '+09:30' },
+  { label: '(GMT +10:00) Sydney, Guam, Vladivostok', utc: '+10:00' },
+  { label: '(GMT +10:30) Lord Howe Island', utc: '+10:30' },
+  { label: '(GMT +11:00) Solomon Islands, New Caledonia', utc: '+11:00' },
+  { label: '(GMT +12:00) Fiji, Kamchatka, Marshall Islands', utc: '+12:00' },
+  { label: '(GMT +13:00) Tonga, Phoenix Islands', utc: '+13:00' },
+  { label: '(GMT +14:00) Line Islands', utc: '+14:00' },
+];
 
 // ----------------------------------------------------------------------
 
@@ -38,12 +77,6 @@ type Props = {
 export default function OwnerForm({ currentTwitterAccount, handleUpdateData, onClose }: Props) {
   const [profileUrls, setProfileUrls] = useState([] as IUploadUrlType);
   const [bannerUrls, setBannerUrls] = useState([] as IUploadUrlType);
-
-  const [timezones, setTimezones] = useState<Timezone[]>([]);
-
-  useEffect(() => {
-    setTimezones(getTimezones());
-  }, []);
 
   const { enqueueSnackbar } = useSnackbar();
 

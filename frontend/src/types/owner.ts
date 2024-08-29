@@ -9,3 +9,5 @@ export type ITOwner = {
   name: string;
   bio?: string;
 };
+
+export type TEdit = { value: string; label: string };
