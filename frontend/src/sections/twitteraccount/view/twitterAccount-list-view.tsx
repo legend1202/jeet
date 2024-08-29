@@ -109,7 +109,7 @@ export default function TwitterAccountListView() {
     },
     {
       field: 'vstatus',
-      headerName: 'Visiblity Status',
+      headerName: 'Visiblity',
       flex: 1,
       minWidth: 140,
       hideable: false,

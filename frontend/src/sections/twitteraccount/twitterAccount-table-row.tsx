@@ -68,7 +68,7 @@ export function RenderCellSB({ params }: ParamsProps) {
           (params.row.gban === '1' && 'success') ||
           (params.row.gban === '2' && 'warning') ||
           params.row.gban ||
-          'default'
+          'warning'
         }
       >
         {getSBANText(params.row.gban)}
@@ -85,8 +85,8 @@ export function RenderCellGhosty({ params }: ParamsProps) {
         color={
           (params.row.gban > 70 && 'success') ||
           (params.row.gban <= 70 && params.row.gban > 30 && 'warning') ||
-          (params.row.gban <= 30 && 'error') ||
-          'default'
+          (params.row.gban <= 30 && 'warning') ||
+          'warning'
         }
       >
         {params.row.gban ? `${params.row.gban * 100}%` : '???'}
@@ -104,6 +104,7 @@ export function RenderCellTrb({ params }: ParamsProps) {
           (params.row.trban === '1' && 'success') ||
           (params.row.trban === '2' && 'warning') ||
           params.row.trban ||
+          'warning' ||
           'default'
         }
       >
