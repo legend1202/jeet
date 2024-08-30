@@ -1,5 +1,4 @@
 import { Controller, useFormContext } from 'react-hook-form';
-
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 // ----------------------------------------------------------------------
@@ -30,6 +29,7 @@ export default function RHFTextField({ name, helperText, type, ...other }: Props
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}
+          InputLabelProps={{ shrink: true }} // Add this line to hide the placeholder
           {...other}
         />
       )}
