@@ -60,7 +60,22 @@ export default function ProfileCover({ user, handleNewOwnerPopOver }: Props) {
               textAlign: { xs: 'center', md: 'unset' },
             }}
             primary={user?.email}
-            secondary={<Iconify icon="solar:pen-bold" onClick={handleNewOwnerPopOver} />}
+            secondary={
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    color: 'primary.main', // Change color on hover
+                    opacity: 1, // Adjust opacity on hover
+                  },
+                }}
+                onClick={handleNewOwnerPopOver}
+              >
+                <Iconify icon="solar:pen-bold" />
+              </Box>
+            }
             primaryTypographyProps={{
               typography: 'h4',
             }}

@@ -254,7 +254,7 @@ export default function OwnerForm({ currentTwitterAccount, handleUpdateData, onC
   const handleUploadImage = async () => {
     console.log('');
   };
-
+  console.log(values.start_date);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ px: 3 }}>
