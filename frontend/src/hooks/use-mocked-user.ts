@@ -15,7 +15,7 @@ export function useMockedUser() {
   const user = {
     id: '8864c717-587d-472a-929a-8e5f298024da-0',
     displayName: 'Angel Dev',
-    email: 'demo@minimals.cc',
+    email: 'demo@Angels.cc',
     password: 'demo1234',
     photoURL: '/assets/images/home/rocket.webp',
     phoneNumber: '+40 777666555',

@@ -27,9 +27,9 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'Minimal UI Kit',
+  title: 'Angel UI Kit',
   description:
-    'The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
+    'The starting point for your next project with Angel UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   manifest: '/manifest.json',
   icons: [
